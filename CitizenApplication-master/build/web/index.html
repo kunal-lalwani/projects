@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Citizen</title>
+
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet"> 
+
+    <!-- JS libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
+
+</head>
+<body>
+    
+    <div class='container'>
+        <div class='appName'>
+            CITIZEN
+        </div>
+        <div class='hero-text'>
+            A <b>BOT</b> that has <br> Crowd Sourced Information <br> on Politicians
+        </div>
+        <div class='btn-container'>
+            <span class='go-to-chat-btn'>
+                MEET THE BOT
+            </span>
+        </div>
+    </div>
+    <div class='chat-container'>
+        <div class='chat-title'>
+            CITIZEN
+            <span class='chat-title-small'>BOT</span>
+        </div>
+        <div class='message-container'>
+            
+        </div>
+        <div class='input-container'>
+            <input type="text" name="userInput" id="userInput">
+            <div class='send-btn'>send</div>            
+        </div>
+    </div>
+
+</body>
+
+<style type="text/css" media="screen">
+    
+    body{
+        margin: 0;
+        font-family: 'Roboto', sans-serif;
+    }
+    .container{
+        width: 100vw;
+        height: 95vh;
+        background-color: #eee;
+        padding-top: 5%;
+    }
+    .appName{
+        text-align: center;
+        color: #962D3E;
+        font-weight: 300;
+        letter-spacing: 10px;
+        font-size: 72px;
+        background-color: #fff;
+    }
+    .hero-text{
+        text-align: center;
+        font-size: 64px;
+        color: #343642;
+        line-height: 90px;
+        letter-spacing: 2px;
+        font-weight: 100;
+        margin-top: 5%;
+        margin-bottom:  5%;
+    }
+    .btn-container{
+        text-align: center !important;
+        width: 100%;
+        margin-top: 5%;
+    }
+    .go-to-chat-btn{
+        text-align: center;
+        padding: 12px 21px 12px 21px;
+        border:1px solid #212121;
+        cursor: pointer;
+    }
+    .go-to-chat-btn:hover{
+        color: #eee;
+        background-color: #962D3E;
+    }
+    .chat-container{
+        background-color: #343642;
+        width: 90vw;
+        height: 90vh;
+        padding: 5vh 5vw 5vh 5vw;
+    }
+    .chat-title{
+        text-align: left;
+        color: #962D3E;
+        font-weight: 300;
+        letter-spacing: 10px;
+        font-size: 72px;
+    }
+    .chat-title-small{
+        font-size: 36px;
+        letter-spacing: 2px;
+    }
+    .message-container{
+        width: 96%;
+        background-color: #eee;
+        height: 60vh;
+        padding: 2%;
+        overflow: scroll;  
+    }
+    .input-container{
+        margin-top: 5px;
+        width: 100%;
+        background-color: #eee;
+        height: 10vh;
+        position: relative;
+    }
+    .send-btn{
+        text-align: center;
+        color: #962D3E;
+        padding: 6px 12px 6px 12px;
+        font-size: 18px;
+        border-radius: 3px;
+        border: 1px solid #962D3E;
+        box-shadow: 0;
+        width: 100px;
+        position: absolute;
+        right: 0px;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        cursor: pointer;
+    }
+    .individual-message{
+        margin: 10px;
+        font-weight: 100;
+    }
+    .individual-message-server{
+        text-align: right;
+    }
+    .server-message{
+        background-color: #962D3E;
+        color: #eee;
+        padding: 21px;
+        border-radius: 6px;
+        display: inline-block;
+    }
+    .individual-message-client{
+        text-align: left;
+    }
+    .client-message{
+        background-color: #346E54;
+        color: #eee;
+        padding: 21px;
+        border-radius: 6px;
+        display: inline-block;
+    }
+    #userInput{
+        width: 600px;
+        font-size: 32px;
+        padding: 10px;
+        border: 2px solid #212121;
+        border-radius: 6px;
+        background-color: #fff;
+        transform: translate(1%,-50%);
+        position: absolute;
+        top: 50%;
+    }
+</style>
+
+<script type="text/javascript">
+
+    // FORCE PAGE TO START FROM TOP
+    $(document).ready(function(e){
+        
+        // SETTING LEVEL = 0
+        localStorage.setItem("level",1);
+
+        // ADD HELLO MESSAGE FROM SERVER
+        addServerMessage("Hello there! <br> Please tell me the location in which you are interested.");
+    });
+
+    function addServerMessage(msg){
+        var tmpHtml = "<div class='individual-message individual-message-server'><span class='server-message'>"+msg+"</span></div>";
+
+        $('.message-container').append(tmpHtml);
+    }
+
+    function addUserMessage(msg){
+        var tmpHtml = "<div class='individual-message individual-message-client'><span class='client-message'>"+msg+"</span></div>";
+
+        $('.message-container').append(tmpHtml);
+    }
+
+    // GO TO CHAT SECTION
+    $(document).on('click','.go-to-chat-btn',function(e){
+        
+        var distance = $('.chat-container').position().top+1;
+
+        $('html,body').animate({
+            'scrollTop': distance
+        });
+
+    });
+
+    // LOGIC WHEN SEND-MESSAGE BUTTON IS CLICKED
+    $(document).on('click','.send-btn',function(e){
+        
+        var inputCommand = $('#userInput').val();
+
+        var lastLevel = localStorage.getItem("level");
+        console.log("Last ->"+lastLevel);
+
+        addUserMessage(inputCommand);
+
+        switch(lastLevel) {
+
+            case '1':
+
+                // MAKE REQUEST TO SERVER WITH REQ CONTAINING LOCATION                
+                var data = {};
+                data.level = 1;
+                data.location = inputCommand;
+
+                $.post('Bot',data,function(e){
+
+                    var respArr = e.split("*");
+
+                    if(respArr[0] === "1"){
+                        console.log(respArr);
+                        addServerMessage(respArr[1]);
+                        addServerMessage("Please tell me the name of the politician who you want to know about.");
+                        localStorage.setItem("level",2);
+                    }
+                    else{
+                        console.log(respArr);
+                        addServerMessage("Sorry! I didn't understand that. Let's start again.");
+                        // RESTART CONVERSATION
+                           
+                    }
+                    
+                });
+
+                break;
+            
+            case '2':
+
+                // MAKE REQUEST TO SERVER WITH REQ CONTAINING LOCATION                
+                var data = {};
+                data.level = 2;
+                data.name = inputCommand;
+
+                // STORE POLITICIAN NAME
+                localStorage.setItem("pName",inputCommand);
+
+                $.post('Bot',data,function(e){
+
+                    var respArr = e.split("*");
+                    console.log(respArr);
+
+                    if(respArr[0] === "1" && respArr[1] !== "" && respArr[2] !== ""){
+                        console.log(respArr);
+                        addServerMessage(respArr[1]);
+                        addServerMessage(respArr[2]);
+                        addServerMessage("Do you want to rate this politician? (yes/no)");
+                        localStorage.setItem("level","3");
+                    }
+                    else{
+                        console.log(respArr);
+                        addServerMessage("Sorry! Data is not present. Let's start again.");
+                        // RESTART CONVERSATION
+                           
+                    }
+                    
+                });
+                
+                break;
+
+            case '3':
+
+                if(inputCommand === 'yes'){
+                    // MAKE REQUEST TO SERVER WITH REQ CONTAINING LOCATION                
+                    var data = {};
+                    data.level = 3;
+
+                    $.post('Bot',data,function(e){
+
+                        var respArr = e.split("*");
+                        console.log(respArr);
+
+                        if(respArr[0] === "1"){
+                            console.log(respArr);
+                            addServerMessage("<b>Categories</b><br><br>"+respArr[1]);
+                            addServerMessage("Please tell me the category you want to rate him/her on.");
+                            localStorage.setItem("level","4");
+                        }
+                        else{
+                            console.log(respArr);
+                            addServerMessage("Sorry! We ran into a wall. Let's start again.");
+                            // RESTART CONVERSATION
+                               
+                        }
+                        
+                    });    
+                }
+                else if(inputCommand === 'no'){
+
+                }
+                else{
+                    // INVALID INPUT
+                    addServerMessage("Sorry! We ran into a wall. Let's start again.");
+                    // RESTART CONVERSATION
+                }
+
+                break;
+
+            case '4':
+                
+                localStorage.setItem('category_level4',inputCommand);
+                addServerMessage("Please rate him/her out of 10.");
+                localStorage.setItem('level',5);
+                
+                break;
+
+            case '5':
+                
+                localStorage.setItem('rating_level5',inputCommand);
+                addServerMessage("Any Positive comment? (no if none)");
+                localStorage.setItem('level',6);
+                
+                break;
+
+            case '6':
+                
+                localStorage.setItem('positiveComment_level6',inputCommand);
+                addServerMessage("Any Negative comment? (no if none)");
+                localStorage.setItem('level',7);
+                
+                break;
+
+            case '7':
+                
+                localStorage.setItem('negativeComment_level7',inputCommand);
+                var data = {};
+                data.level = "7";
+
+                var positiveComment = localStorage.getItem('positiveComment_level6');
+                var negativeComment = localStorage.getItem('negativeComment_level7');
+                var rating = localStorage.getItem('rating_level5');
+
+                data.category = localStorage.getItem("category_level4");
+                data.pName = localStorage.getItem("pName");
+
+                if(isNaN(rating)){
+                    // INVALID INPUTS
+                }
+                else{
+                    data.positiveComment = positiveComment;
+                    data.negativeComment = negativeComment;
+                    if(positiveComment === 'no'){
+                        data.positiveComment = '';
+                    }
+                    if(negativeComment === 'no'){
+                        data.negativeComment = '';
+                    }
+                    data.rating = rating;
+
+                    // STORE THE REVIEW IN DB
+                    $.post('Bot',data,function(e){
+
+                        var respArr = e.split("*");
+                        console.log(respArr);
+
+                        if(respArr[0] === "1"){
+                            console.log(respArr);
+                            addServerMessage("Thank you for your response! Your effort will help clean up our political system and enable others to chose better leaders.");
+                            addServerMessage("Let's start again! Location?");
+                            localStorage.setItem('level',1);
+                        }
+                        else if(respArr[0] === "0"){
+                            console.log(respArr);
+                            addServerMessage("Sorry! We were unable to record your reveiw. Let's start again.");
+                            // RESTART CONVERSATION
+                               
+                        }
+                        else{
+                            console.log(respArr);
+                            addServerMessage("Sorry! We hit a brick wall. Let's start again.");
+                            // RESTART CONVERSATION
+                        }
+                        
+                    });
+                }
+
+
+                            
+                
+                break;
+
+            default:
+                console.log('kuch to galat hai');
+        }
+
+                
+    });
+
+</script>
+
+</html>
